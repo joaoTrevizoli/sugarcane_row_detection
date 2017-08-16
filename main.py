@@ -2,12 +2,24 @@
 import cv2
 import numpy as np
 
+# image is expected be in RGB color space
 
-def morpholocial_transformation(path, shape, iterations, img_format=0):
+
+def select_rgb_green(image):
+
+    lower = np.uint8([65, 190,   0])
+    upper = np.uint8([178, 255, 175])
+    green_mask = cv2.inRange(image, lower, upper)
+    return green_mask
+
+
+def morpholocial_transformation(img, shape, iterations, fct, img_format=0):
     if not isinstance(shape, tuple):
         raise TypeError("shape must be tuple")
-    img = cv2.imread(path, img_format)
-    erosion = cv2.erode(img, kernel=kernel, iterations=iterations)
+    if isinstance(img, str):
+        img = cv2.imread(img, img_format)
+    kernel = np.ones(shape, np.uint8)
+    erosion = fct(img, kernel=kernel, iterations=iterations)
     return erosion
 
 
@@ -17,45 +29,20 @@ def show(img, name):
     cv2.imshow(name, img)
     cv2.waitKey()
 
-img = cv2.imread('DJI_0065.jpg', 0)
-
-kernel = np.ones((3, 3), np.uint8)
-#
-# erosion = cv2.erode(img, kernel, iterations=1)
-
-# cv2.namedWindow('erosion', cv2.WINDOW_NORMAL)
-# cv2.resizeWindow('erosion', 600,600)
-# cv2.imshow('erosion', erosion)
-#
-# k = cv2.waitKey()
-#
-# kernel2 = np.ones((3, 3), np.uint8)
-#
-# dilation = cv2.dilate(erosion, kernel2, iterations=1)
-#
-# cv2.namedWindow('dilation', cv2.WINDOW_NORMAL)
-# cv2.resizeWindow('dilation', 600,600)
-# # cv2.imshow('erosion', img)
-# cv2.imshow('dilation', dilation)
-#
-# # cv2.imshow("teste", img)
-# k = cv2.waitKey()
 
 
 
 
 if __name__ == '__main__':
+    image = select_rgb_green(cv2.imread('caca_02.jpg'))
+    show(image, 'green filter')
     erode_callback = cv2.erode
 
-    erosion = morpholocial_transformation('DJI_0065.jpg', (3, 3), 1)
-    show(erosion, 'erosion')
+    # erosion = morpholocial_transformation(image, (2, 2), 1, erode_callback)
+    # show(erosion, 'erosion')
 
+    dilation = morpholocial_transformation(image, (3, 3), 1, cv2.dilate)
+    show(dilation, 'dilation')
 
-
-    # cv2.namedWindow('erosion', cv2.WINDOW_NORMAL)
-    # cv2.resizeWindow('erosion', 600, 600)
-    # cv2.imshow('erosion', erosion)
-    #
-    # k = cv2.waitKey()
     cv2.destroyAllWindows()
 
