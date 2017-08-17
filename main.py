@@ -150,6 +150,12 @@ def n_max(a, n):
 
 
 if __name__ == '__main__':
+    from image_processing import SugarCanePreProcessing
+
+    sugarCaneImages = SugarCanePreProcessing('caca_01.jpg')
+
+    sugarCaneImages.show("plain")
+
     image = cv2.imread('caca_02.jpg')
 
     show(image, 'plain image')

@@ -36,7 +36,7 @@ class SugarCanePreProcessing():
             img = self.base_image
         return cv2.Canny(img, low_thress, high_thress)
 
-    def show(self, img, name):
+    def show(self, name, img=None):
         if img is None:
             img = self.base_image
         cv2.namedWindow(name, cv2.WINDOW_NORMAL)
