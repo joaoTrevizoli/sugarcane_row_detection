@@ -33,7 +33,7 @@ def to_gray_scale(img):
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
 
-def gaussian_smooth(img, kernel_shape=15):
+def gaussian_smooth(img, kernel_shape=25):
     return cv2.GaussianBlur(img, (kernel_shape, kernel_shape), 0)
 
 
@@ -49,7 +49,7 @@ def hough_lines(img):
     Returns hough lines (not the image with lines)
     """
 
-    return cv2.HoughLinesP(img, rho=1, theta=np.pi / 180, threshold=5, minLineLength=15, maxLineGap=8)
+    return cv2.HoughLinesP(img, rho=1, theta=np.pi / 180, threshold=5, minLineLength=15, maxLineGap=12)
 
 
 def show(img, name):
@@ -162,6 +162,11 @@ if __name__ == '__main__':
     edges = canny(smoothed_image)
     show(edges, 'edge detection')
 
+    im2, contours, hierarchy = cv2.findContours(edges,cv2.RETR_EXTERNAL,2)
+    cv2.drawContours(image, contours, -1, (0,255,0), 3)
+
+    show(image, "countours")
+
     lines = hough_lines(edges)
     for i in lines:
         x1, y1, x2, y2 = i[0]
@@ -181,6 +186,7 @@ if __name__ == '__main__':
     # cv2.polylines(image, np.array(teste), 3, (0, 255, 0))
 
     show(image, "lines")
+
 
     # c = cv2.findContours(edges.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # show(cv2.drawContours(image, c[1], 1, (0, 255, 0), 3), 'teste')
