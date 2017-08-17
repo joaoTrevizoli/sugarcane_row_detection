@@ -59,6 +59,16 @@ def show(img, name):
     cv2.waitKey()
 
 
+def find_close(contour1, countour2):
+    row1, row2 = contour1.shape[0], countour2.shape[0]
+    for i in range(row1):
+        for j in range(row2):
+            dist = np.linalg.norm(contour1[i] - countour2[j])
+            if abs(dist) < 50:
+                return True
+            elif i == row1 - 1 and j == row2 - 1:
+                return False
+
 
 # generalized hough lines
 
@@ -162,16 +172,53 @@ if __name__ == '__main__':
     edges = canny(smoothed_image)
     show(edges, 'edge detection')
 
-    im2, contours, hierarchy = cv2.findContours(edges,cv2.RETR_EXTERNAL,2)
-    cv2.drawContours(image, contours, -1, (0,255,0), 3)
+    cv2.imwrite("edges.jpg", edges)
 
+    im2, contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # cv2.drawContours(image, contours, -1, (0,255,0), 3)
+
+    # show(image, "countours")
+
+    length = len(contours)
+    status = np.zeros((length, 1))
+
+    for i, cnt1 in enumerate(contours):
+        x = 1
+        if i != length-1:
+            for j, cnt2 in enumerate(contours[i+1:]):
+                x = x + 1
+                dist = find_close(cnt1, cnt2)
+                if dist is True:
+                    val = min(status[i], status[x])
+                    status[x] = status[i] = val
+                else:
+                    try:
+                        if status[x] == status[i]:
+                            status[x] = i+1
+                    except Exception as e:
+                        print(e)
+    unified = []
+    maximum = int(status.max()) + 1
+    for i in range(maximum):
+        pos = np.where(status == i)[0]
+        if pos.size != 0:
+            cont = np.vstack(contours[i] for i in pos)
+            hull = cv2.convexHull(cont)
+            unified.append(hull)
+
+    cv2.drawContours(image, unified, -1, (0,255,0), 2)
     show(image, "countours")
+    cv2.imwrite("countours.jpg", image)
 
-    lines = hough_lines(edges)
-    for i in lines:
-        x1, y1, x2, y2 = i[0]
 
-        cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 1)
+
+
+
+    # lines = hough_lines(edges)
+    # for i in lines:
+    #     x1, y1, x2, y2 = i[0]
+    #
+    #     cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 1)
 
     # print(lines)
     # teste = []
