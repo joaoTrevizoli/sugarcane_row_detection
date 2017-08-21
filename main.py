@@ -156,7 +156,7 @@ if __name__ == '__main__':
 
     sugarCaneImages.show("plain")
 
-    image = cv2.imread('caca_02.jpg')
+    image = cv2.imread('caca_01.jpg')
 
     show(image, 'plain image')
 
@@ -164,16 +164,26 @@ if __name__ == '__main__':
 
     show(green_mask, 'green filter')
 
+    cv2.imwrite("green_filter.jpg", green_mask)
+
     erode_callback = cv2.erode
 
     erosion = morphological_transformation(green_mask, 1, 1, erode_callback)
     show(erosion, 'erosion')
 
+    cv2.imwrite("erosion.jpg", erosion)
+
     dilation = morphological_transformation(erosion, 3, 1, cv2.dilate)
     show(dilation, 'dilation')
 
+    cv2.imwrite("dilation.jpg", dilation)
+
+
     smoothed_image = gaussian_smooth(dilation)
     show(smoothed_image, "Gaussian Smooth")
+
+    cv2.imwrite("smoothed_image.jpg", smoothed_image)
+
 
     edges = canny(smoothed_image)
     show(edges, 'edge detection')
@@ -181,38 +191,42 @@ if __name__ == '__main__':
     cv2.imwrite("edges.jpg", edges)
 
     im2, contours, hierarchy = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    # cv2.drawContours(image, contours, -1, (0,255,0), 3)
+    cv2.drawContours(image, contours, -1, (0,255,0), 3)
 
-    # show(image, "countours")
+    print(len(contours))
 
-    length = len(contours)
-    status = np.zeros((length, 1))
+    show(image, "countours")
+    cv2.imwrite("countours.jpg", image)
 
-    for i, cnt1 in enumerate(contours):
-        x = 1
-        if i != length-1:
-            for j, cnt2 in enumerate(contours[i+1:]):
-                x = x + 1
-                dist = find_close(cnt1, cnt2)
-                if dist is True:
-                    val = min(status[i], status[x])
-                    status[x] = status[i] = val
-                else:
-                    try:
-                        if status[x] == status[i]:
-                            status[x] = i+1
-                    except Exception as e:
-                        print(e)
-    unified = []
-    maximum = int(status.max()) + 1
-    for i in range(maximum):
-        pos = np.where(status == i)[0]
-        if pos.size != 0:
-            cont = np.vstack(contours[i] for i in pos)
-            hull = cv2.convexHull(cont)
-            unified.append(hull)
 
-    cv2.drawContours(image, unified, -1, (0,255,0), 2)
+    # length = len(contours)
+    # status = np.zeros((length, 1))
+    # 
+    # for i, cnt1 in enumerate(contours):
+    #     x = 1
+    #     if i != length-1:
+    #         for j, cnt2 in enumerate(contours[i+1:]):
+    #             x = x + 1
+    #             dist = find_close(cnt1, cnt2)
+    #             if dist is True:
+    #                 val = min(status[i], status[x])
+    #                 status[x] = status[i] = val
+    #             else:
+    #                 try:
+    #                     if status[x] == status[i]:
+    #                         status[x] = i+1
+    #                 except Exception as e:
+    #                     print(e)
+    # unified = []
+    # maximum = int(status.max()) + 1
+    # for i in range(maximum):
+    #     pos = np.where(status == i)[0]
+    #     if pos.size != 0:
+    #         cont = np.vstack(contours[i] for i in pos)
+    #         hull = cv2.convexHull(cont)
+    #         unified.append(hull)
+
+    # cv2.drawContours(image, unified, -1, (0,255,0), 2)
     show(image, "countours")
     cv2.imwrite("countours.jpg", image)
 
@@ -241,8 +255,8 @@ if __name__ == '__main__':
     show(image, "lines")
 
 
-    # c = cv2.findContours(edges.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    # show(cv2.drawContours(image, c[1], 1, (0, 255, 0), 3), 'teste')
+    c = cv2.findContours(edges.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    show(cv2.drawContours(image, c[1], 1, (0, 255, 0), 3), 'teste')
 
     # for x1, y1, x2, y2 in lines:
     #     cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0) ,2)
