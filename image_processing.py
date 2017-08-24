@@ -4,8 +4,12 @@ import os
 from functools import wraps
 
 
+def base_path():
+    return os.path.dirname(os.path.abspath(__file__))
+
+
 def save(func):
-    __path = "{}/{}/".format(os.path.dirname(os.path.abspath(__file__)), "output_images")
+    __path = "{}/{}/".format(base_path(), "output_images")
 
     @wraps(func)
     def image_wrapper(self, *args, **kwargs):
@@ -20,8 +24,8 @@ def save(func):
 
 class SugarCaneProcessingBase(object):
 
-    __input_path = "{}/{}/".format(os.path.dirname(os.path.abspath(__file__)), "base_images")
-    __output_path = "{}/{}/".format(os.path.dirname(os.path.abspath(__file__)), "output_images")
+    __input_path = "{}/{}/".format(base_path(), "base_images")
+    __output_path = "{}/{}/".format(base_path(), "output_images")
 
     def __init__(self, base_image, name, save_mode=False):
         if not os.path.exists(self.__output_path):
@@ -45,6 +49,7 @@ class SugarCaneProcessingBase(object):
         cv2.waitKey()
         if kill_all:
             cv2.destroyAllWindows()
+
 
 class SugarCanePreProcessing(SugarCaneProcessingBase):
 
