@@ -18,7 +18,7 @@ def save(func):
     return image_wrapper
 
 
-class SugarCanePreProcessing(object):
+class SugarCaneProcessingBase(object):
 
     __input_path = "{}/{}/".format(os.path.dirname(os.path.abspath(__file__)), "base_images")
     __output_path = "{}/{}/".format(os.path.dirname(os.path.abspath(__file__)), "output_images")
@@ -34,6 +34,18 @@ class SugarCanePreProcessing(object):
         self.base_image = base_image
         self.name = name
         self.save_mode = save_mode
+
+    def show(self,img=None, name=None):
+        if img is None:
+            img = self.base_image
+            name = self.name
+        cv2.namedWindow(name, cv2.WINDOW_NORMAL)
+        cv2.resizeWindow(name, 400, 400)
+        cv2.imshow(name, img)
+        cv2.waitKey()
+
+
+class SugarCanePreProcessing(SugarCaneProcessingBase):
 
     @save
     def select_rgb_green(self):
@@ -67,17 +79,6 @@ class SugarCanePreProcessing(object):
             img = self.base_image
         return cv2.GaussianBlur(img, (kernel_shape, kernel_shape), 0)
 
-
-
-    def show(self,img=None, name=None):
-        if img is None:
-            img = self.base_image
-            name = self.name
-        cv2.namedWindow(name, cv2.WINDOW_NORMAL)
-        cv2.resizeWindow(name, 400, 400)
-        cv2.imshow(name, img)
-        cv2.waitKey()
-
     def __call__(self):
         green_mask = self.select_rgb_green()
         erosion = self.morphological_transformation(green_mask, 1, 1, cv2.erode)
@@ -85,18 +86,15 @@ class SugarCanePreProcessing(object):
         return self.gaussian_smooth(dilation)
 
 
-class SugarCaneLineFinder():
+class SugarCaneLineFinder(SugarCaneProcessingBase):
 
     def __init__(self, gauss_filtered_image, name, save_mode=False):
-
-        self.g_filtered_image = gauss_filtered_image
-        self.name = name
-        self.save_mode = save_mode
         self.__plants = 0
+        SugarCaneProcessingBase.__init__(self, gauss_filtered_image, name, save_mode)
 
     @save
     def canny(self, low_thress=0, high_thress=10):
-        return cv2.Canny(self.g_filtered_image, low_thress, high_thress)
+        return cv2.Canny(self.base_image, low_thress, high_thress)
 
     @save
     def get_lines(self, output_image):
