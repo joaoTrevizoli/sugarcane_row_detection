@@ -9,8 +9,8 @@ def select_rgb_green(image):
 
     lower = np.uint8([65, 190,   0])
     upper = np.uint8([178, 255, 175])
-    green_mask = cv2.inRange(image, lower, upper)
-    return green_mask
+    mask = cv2.inRange(image, lower, upper)
+    return mask
 
 
 def morphological_transformation(img, kernel_shape, iterations, fct, img_format=cv2.IMREAD_COLOR):
@@ -150,43 +150,49 @@ def n_max(a, n):
 
 
 if __name__ == '__main__':
-    from image_processing import SugarCanePreProcessing
+    from image_processing import *
 
-    sugarCaneImages = SugarCanePreProcessing('caca_01.jpg')
+    sugarCaneImages = SugarCanePreProcessing('caca_01.jpg', "cana.jpg", True)
+    pre_processed_image = sugarCaneImages()
+    final = SugarCaneLineFinder(pre_processed_image, "pos_cana.jpg", True)
+    final('caca_01.jpg')
 
-    sugarCaneImages.show("plain")
+    # sugarCaneImages.save(sugarCaneImages.gaussian_smooth)
+
+    # sugarCaneImages.show("plain")
 
     image = cv2.imread('caca_01.jpg')
 
-    show(image, 'plain image')
+    # show(image, 'plain image')
 
     green_mask = select_rgb_green(image)
 
-    show(green_mask, 'green filter')
+
+    # show(green_mask, 'green filter')
 
     cv2.imwrite("green_filter.jpg", green_mask)
 
     erode_callback = cv2.erode
 
     erosion = morphological_transformation(green_mask, 1, 1, erode_callback)
-    show(erosion, 'erosion')
+    # show(erosion, 'erosion')
 
     cv2.imwrite("erosion.jpg", erosion)
 
     dilation = morphological_transformation(erosion, 3, 1, cv2.dilate)
-    show(dilation, 'dilation')
+    # show(dilation, 'dilation')
 
     cv2.imwrite("dilation.jpg", dilation)
 
 
     smoothed_image = gaussian_smooth(dilation)
-    show(smoothed_image, "Gaussian Smooth")
+    # show(smoothed_image, "Gaussian Smooth")
 
     cv2.imwrite("smoothed_image.jpg", smoothed_image)
 
 
     edges = canny(smoothed_image)
-    show(edges, 'edge detection')
+    # show(edges, 'edge detection')
 
     cv2.imwrite("edges.jpg", edges)
 
@@ -195,7 +201,7 @@ if __name__ == '__main__':
 
     print(len(contours))
 
-    show(image, "countours")
+    # show(image, "countours")
     cv2.imwrite("countours.jpg", image)
 
 
@@ -227,7 +233,7 @@ if __name__ == '__main__':
     #         unified.append(hull)
 
     # cv2.drawContours(image, unified, -1, (0,255,0), 2)
-    show(image, "countours")
+    # show(image, "countours")
     cv2.imwrite("countours.jpg", image)
 
 
@@ -252,11 +258,11 @@ if __name__ == '__main__':
     # teste = np.int32([teste])
     # cv2.polylines(image, np.array(teste), 3, (0, 255, 0))
 
-    show(image, "lines")
+    # show(image, "lines")
 
 
     c = cv2.findContours(edges.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    show(cv2.drawContours(image, c[1], 1, (0, 255, 0), 3), 'teste')
+    # show(cv2.drawContours(image, c[1], 1, (0, 255, 0), 3), 'teste')
 
     # for x1, y1, x2, y2 in lines:
     #     cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0) ,2)
