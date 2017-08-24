@@ -233,3 +233,4 @@ $RECYCLE.BIN/
 # LibreOffice locks
 .~lock.*#
 
+/output_images/
