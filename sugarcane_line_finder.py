@@ -1,5 +1,6 @@
 import cv2
 import os
+import tabulate
 import numpy as np
 from matplotlib import pyplot as plt
 from functools import wraps
@@ -132,3 +133,15 @@ class SugarCaneLineFinder(SugarCaneProcessingBase):
 
     def __call__(self, output_image):
         return self.get_lines(output_image)
+
+    def __str__(self):
+        img = self.canny()
+        _, contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        body = [["Image Shape", self.base_image.shape, "numpy array"],
+                ["Image size", self.base_image.size, "pixels"],
+                ["Sugarcane clumps", len(contours), "int"]]
+        headers = ["Feature", "Report", "Type"]
+        table = tabulate.tabulate(body,
+                                  headers,
+                                  tablefmt="fancy_grid")
+        return table
