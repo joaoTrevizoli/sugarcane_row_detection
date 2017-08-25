@@ -4,12 +4,12 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    from image_processing import *
+    from sugarcane_line_finder import *
 
-    sugarCaneImages = SugarCanePreProcessing('caca_01.jpg', "cana.jpg", True)
+    sugarCaneImages = SugarCanePreProcessing('cana_01.jpg', "cana.jpg", True)
     pre_processed_image = sugarCaneImages()
     final = SugarCaneLineFinder(pre_processed_image, "pos_cana.jpg", True)
-    final('caca_01.jpg')
+    final('cana_01.jpg')
 
     # sugarCaneImages.save(sugarCaneImages.gaussian_smooth)
 

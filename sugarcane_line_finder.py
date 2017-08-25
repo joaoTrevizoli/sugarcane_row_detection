@@ -2,7 +2,7 @@ import cv2
 import os
 import numpy as np
 from matplotlib import pyplot as plt
-from functools import wrap
+from functools import wraps
 
 
 def base_path():
@@ -41,15 +41,19 @@ class SugarCaneProcessingBase(object):
         self.save_mode = save_mode
 
     @classmethod
-    def open(cls, name):
-        return cls
-    
-    def opencv_show(self, img=None, name=None, kill_all=False):
+    def multiple_processor(cls, iterator, save_mode=False):
+        for image in iterator:
+            if isinstance(image["img"], str):
+                img_path = cls.__input_path + image[0]
+                image["img"] = cv2.imread(img_path, cv2.IMREAD_COLOR)
+            yield cls(image["img"], image["name"], save_mode)
+
+    def opencv_show(self, img=None, name=None, kill_all=True):
         if img is None:
             img = self.base_image
             name = self.name
         cv2.namedWindow(name, cv2.WINDOW_NORMAL)
-        cv2.resizeWindow(name, 400, 400)
+        cv2.resizeWindow(name, 300, 300)
         cv2.imshow(name, img)
         cv2.waitKey()
         if kill_all:
@@ -62,8 +66,6 @@ class SugarCaneProcessingBase(object):
         plt.show()
 
 
-        
-        
 class SugarCanePreProcessing(SugarCaneProcessingBase):
 
     @save
