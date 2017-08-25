@@ -1,7 +1,8 @@
 import cv2
-import numpy as np
 import os
-from functools import wraps
+import numpy as np
+from matplotlib import pyplot as plt
+from functools import wrap
 
 
 def base_path():
@@ -39,7 +40,7 @@ class SugarCaneProcessingBase(object):
         self.name = name
         self.save_mode = save_mode
 
-    def show(self, img=None, name=None, kill_all=False):
+    def opencv_show(self, img=None, name=None, kill_all=False):
         if img is None:
             img = self.base_image
             name = self.name
@@ -49,8 +50,14 @@ class SugarCaneProcessingBase(object):
         cv2.waitKey()
         if kill_all:
             cv2.destroyAllWindows()
-
-
+    
+    def matplotlib_show(self, img=None):
+        if img is None:
+            img = self.base_image
+        plt.imshow(img)
+        plt.show()
+        
+        
 class SugarCanePreProcessing(SugarCaneProcessingBase):
 
     @save
