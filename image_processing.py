@@ -40,6 +40,10 @@ class SugarCaneProcessingBase(object):
         self.name = name
         self.save_mode = save_mode
 
+    @classmethod
+    def open(cls, name):
+        return cls
+    
     def opencv_show(self, img=None, name=None, kill_all=False):
         if img is None:
             img = self.base_image
@@ -56,6 +60,8 @@ class SugarCaneProcessingBase(object):
             img = self.base_image
         plt.imshow(img)
         plt.show()
+
+
         
         
 class SugarCanePreProcessing(SugarCaneProcessingBase):
