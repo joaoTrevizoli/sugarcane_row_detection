@@ -6,14 +6,15 @@ Neste trabalho é proposto um algoritmo para a detecção e mapeamento de lin
 
 ## Introdução
 
-    - O indice de falhas na cultura da cana de açúcar é um importante indicador da qualidade do canavial.
-    - O georeferenciamento das linhas de plantio são impressindíveis para sistemas de agricultura de precisão.
+- O indice de falhas na cultura da cana de açúcar é um importante indicador da qualidade do canavial.
+- O georeferenciamento das linhas de plantio são impressindíveis para sistemas de agricultura de precisão.
 
 ## Objetivos
     
-    - Identificar falhas.
-    - Georeferênciar linhas da cultura.
-    - Contar touceiras.
+- Identificar falhas na cultura.
+- Georeferênciar linhas da cultura.
+- Contar touceiras.
+- Implementar em sistemas embarcados
 
 ## Instalação
 
