@@ -113,11 +113,11 @@ for i in zip(image_path, image_names):
 ```
 
 
-![png](output_5_0.png)
+![png](docs/output_5_0.png)
 
 
 
-![png](output_5_1.png)
+![png](docs/output_5_1.png)
 
 
 
@@ -276,11 +276,11 @@ for i in sugarcane_images:
 
 
 
-![png](output_9_1.png)
+![png](docs/output_9_1.png)
 
 
 
-![png](output_9_2.png)
+![png](docs/output_9_2.png)
 
 
 
@@ -301,11 +301,11 @@ for i in sugarcane_images:
 
 
 
-![png](output_10_1.png)
+![png](docs/output_10_1.png)
 
 
 
-![png](output_10_2.png)
+![png](docs/output_10_2.png)
 
 
 
@@ -326,11 +326,11 @@ for i in sugarcane_images:
 
 
 
-![png](output_11_1.png)
+![png](docs/output_11_1.png)
 
 
 
-![png](output_11_2.png)
+![png](docs/output_11_2.png)
 
 
 
@@ -356,11 +356,11 @@ for i in sugarcane_images:
 ```
 
 
-![png](output_13_0.png)
+![png](docs/output_13_0.png)
 
 
 
-![png](output_13_1.png)
+![png](docs/output_13_1.png)
 
 
 
